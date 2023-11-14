@@ -1,0 +1,6 @@
+applet,./cart,1000
+applet,./home,2000
+applet,./login,3000
+applet,./prod,4000
+bob,./prod,1000
+bob,./prod,2000
