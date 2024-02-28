@@ -1,9 +1,11 @@
 package com.example.demo.tableapi;
 
+import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.table.api.EnvironmentSettings;
 import org.apache.flink.table.api.Table;
 import org.apache.flink.table.api.TableEnvironment;
 import org.apache.flink.table.api.TableResult;
+import org.apache.flink.types.Row;
 
 import static org.apache.flink.table.api.Expressions.$;
 
@@ -20,7 +22,7 @@ public class TableConectionTest {
         EnvironmentSettings settings = EnvironmentSettings.newInstance().inStreamingMode().build();
         TableEnvironment tableEnvironment = TableEnvironment.create(settings);
         String sql = "CREATE TABLE event (" +
-                "user_name STRING," +
+                "platform_id STRING," +
                 "url STRING" +
                 ") WITH(" +
                 " 'connector' = 'filesystem', " +
@@ -31,23 +33,26 @@ public class TableConectionTest {
         tableEnvironment.executeSql(sql);
         Table event = tableEnvironment.from("event");
 
-        Table resultTable = event.where($("user_name").isEqual("applet")).select($("user_name"), $("url"));
+        Table resultTable = event.where($("platform_id").isEqual("applet")).select($("platform_id"), $("url"));
 
-        tableEnvironment.createTemporaryView("resultTable",resultTable);
+        tableEnvironment.createTemporaryView("resultTable", resultTable);
 
 
-        String sqlOut = "CREATE TABLE eventOut (" +
-                "user_name STRING," +
-                "url STRING" +
-                ") WITH(" +
-                " 'connector' = 'filesystem', " +
-                " 'path' = 'output', " +
-                " 'format' = 'csv' " +
-                ")";
+        resultTable.printSchema();
 
-        tableEnvironment.executeSql(sqlOut);
+//        String sqlOut = "CREATE TABLE eventOut (" +
+//                "user_name STRING," +
+//                "url STRING" +
+//                ") WITH(" +
+//                " 'connector' = 'filesystem', " +
+//                " 'path' = 'output', " +
+//                " 'format' = 'csv' " +
+//                ")";
+//
+//        tableEnvironment.executeSql(sqlOut);
+//
+//        resultTable.executeInsert("eventOut");
 
-        resultTable.executeInsert("eventOut");
     }
 
 

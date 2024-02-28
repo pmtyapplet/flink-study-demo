@@ -65,6 +65,7 @@ public class NFATest {
                 collector.collect(loginEvent.userId+"连续三次登录失败");
             }else  if (nextTransition ==State.Terminal){
                 //直接将状态更新为初始状态，重新开始监测
+                State init = State.init;
                 currencyState.update(State.init);
             }else {
                 currencyState.update(nextTransition);

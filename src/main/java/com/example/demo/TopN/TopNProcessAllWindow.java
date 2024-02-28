@@ -42,7 +42,7 @@ public class TopNProcessAllWindow {
                             }
                         })
                 );
-//直接开窗，收集所有数据
+       //直接开窗，收集所有数据
         stream.map(data -> data.username).windowAll(SlidingEventTimeWindows.of(Time.seconds(10), Time.seconds(5)))
                 .aggregate(new UrlHashMapCountAgg(), new UrlAllWindowResult())
                 .print();
